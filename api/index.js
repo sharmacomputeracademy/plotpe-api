@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://plotpe-two.vercel.app/",
+    origin: "*",
     credentials: true,
   }),
 );
