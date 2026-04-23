@@ -15,7 +15,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://scalive.in",
     credentials: true,
   }),
 );
