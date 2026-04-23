@@ -66,29 +66,31 @@ const getListings = async (req, resp, next) => {
   try {
     const limit = parseInt(req.query.limit) || 9;
     const startIndex = parseInt(req.query.startIndex) || 0;
+
     let offer = req.query.offer;
-    if (offer === undefined || offer == "false") {
-      offer = { $in: [false, true] };
-    }
+    if (offer === "true") offer = true;
+    else if (offer === "false") offer = false;
+    else offer = { $in: [true, false] };
 
     let furnished = req.query.furnished;
-    if (furnished === undefined || furnished === "false") {
-      furnished = { $in: [false, true] };
-    }
+    if (furnished === "true") furnished = true;
+    else if (furnished === "false") furnished = false;
+    else furnished = { $in: [true, false] };
 
     let parking = req.query.parking;
-    if (parking === undefined || parking === "false") {
-      parking = { $in: [false, true] };
-    }
+    if (parking === "true") parking = true;
+    else if (parking === "false") parking = false;
+    else parking = { $in: [true, false] };
 
     let type = req.query.type;
-
-    if (type === undefined || type === "all") {
+    if (!type || type === "all") {
       type = { $in: ["sale", "rent"] };
     }
+
     const searchTerm = req.query.searchTerm || "";
     const sort = req.query.sort || "createdAt";
-    const order = req.query.order || "desc";
+    const order = req.query.order === "asc" ? 1 : -1;
+
     const listings = await Listing.find({
       name: { $regex: searchTerm, $options: "i" },
       offer,
@@ -96,11 +98,14 @@ const getListings = async (req, resp, next) => {
       parking,
       type,
     })
-      .sort({ [sort]: order })
+      .sort({ [sort]: order }) // ✅ fixed
       .limit(limit)
       .skip(startIndex);
+
     resp.status(200).json(listings);
+
   } catch (error) {
+    console.error("GET LISTINGS ERROR:", error); // 🔥 VERY IMPORTANT
     next(error);
   }
 };
