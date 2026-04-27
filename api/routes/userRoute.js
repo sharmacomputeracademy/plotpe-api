@@ -9,9 +9,9 @@ const {
 
 const userRouter = express.Router();
 
-userRouter.get("/:id", verifyToken, getUser);
 userRouter.get("/listings/:id", verifyToken, getUserListings);
 userRouter.put("/update/:id", verifyToken, updateUser);
 userRouter.delete("/delete/:id", verifyToken, deleteUser);
+userRouter.get("/:id", verifyToken, getUser);
 
 module.exports = userRouter;
