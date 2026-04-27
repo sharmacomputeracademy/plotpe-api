@@ -56,7 +56,11 @@ const google = async (req, resp, next) => {
       });
       const { password: pass, ...rest } = user._doc;
       return resp
-        .cookie("access_token", token, { httpOnly: true })
+        .cookie("access_token", token, {
+  httpOnly: true,
+  secure: false,       // true in production (HTTPS)
+  sameSite: "lax",     // try "none" if still not working
+})
         .status(200)
         .json(rest);
     } else {
