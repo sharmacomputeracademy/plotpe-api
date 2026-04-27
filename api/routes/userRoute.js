@@ -9,9 +9,12 @@ const {
 
 const userRouter = express.Router();
 
+// ✅ SPECIFIC ROUTES FIRST
 userRouter.get("/listings/:id", verifyToken, getUserListings);
 userRouter.put("/update/:id", verifyToken, updateUser);
 userRouter.delete("/delete/:id", verifyToken, deleteUser);
+
+// 🔻 GENERIC ROUTE LAST
 userRouter.get("/:id", verifyToken, getUser);
 
 module.exports = userRouter;
