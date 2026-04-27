@@ -4,7 +4,7 @@ const errorHandler = require("../utils/error");
 const createListing = async (req, resp, next) => {
   try {
     const listing = await Listing.create(req.body);
-    resp.status(201).json(listing);
+    return resp.status(201).json(listing);
   } catch (error) {
     next(error);
   }
@@ -16,15 +16,15 @@ const deleteListing = async (req, resp, next) => {
 
   if (!listing) {
     const error = errorHandler(404, "Listing not found!");
-    next(error);
+    return next(error);
   }
   if (req.user.id !== listing.userRef) {
     const error = errorHandler(401, "You can only delete your own listings!");
-    next(error);
+    return next(error);
   }
   try {
     await Listing.findByIdAndDelete(id);
-    resp.status(200).json("Listing has been deleted!");
+    return resp.status(200).json("Listing has been deleted!");
   } catch (error) {
     next(error);
   }
@@ -36,15 +36,15 @@ const updateListing = async (req, resp, next) => {
     const listing = await Listing.findById(id);
     if (!listing) {
       const error = errorHandler(404, "Listing not found!");
-      next(error);
+      return next(error);
     }
     if (req.user.id !== listing.userRef) {
-      next(errorHandler(401, "You can only update your own listings!"));
+      return next(errorHandler(401, "You can only update your own listings!"));
     }
     const updatedListing = await Listing.findByIdAndUpdate(id, req.body, {
       new: true,
     });
-    resp.status(200).json(updatedListing);
+    return resp.status(200).json(updatedListing);
   } catch (error) {
     next(error);
   }
@@ -54,9 +54,9 @@ const getListing = async (req, resp, next) => {
   try {
     const listing = await Listing.findById(req.params.id);
     if (!listing) {
-      next(errorHandler(404, "Listing not found!"));
+      return next(errorHandler(404, "Listing not found!"));
     }
-    resp.status(200).json(listing);
+    return resp.status(200).json(listing);
   } catch (error) {
     next(error);
   }
@@ -102,7 +102,7 @@ const getListings = async (req, resp, next) => {
       .limit(limit)
       .skip(startIndex);
 
-    resp.status(200).json(listings);
+    return resp.status(200).json(listings);
 
   } catch (error) {
     console.error("GET LISTINGS ERROR:", error); // 🔥 VERY IMPORTANT
