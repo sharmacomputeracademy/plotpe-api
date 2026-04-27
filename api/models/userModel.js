@@ -18,7 +18,7 @@ const userSchema = new mongoose.Schema(
         },
         avatar:{
             type: String,
-            default: "https://pixabay.com/images/download/wanderercreative-blank-profile-picture-973460_1920.png"
+            default: "https://static.vecteezy.com/system/resources/thumbnails/051/498/303/small/social-media-chatting-online-default-male-blank-profile-picture-head-and-body-icon-people-standing-icon-grey-background-free-vector.jpg"
         }
     },
     {timestamps: true}
