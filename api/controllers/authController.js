@@ -24,12 +24,12 @@ const signin = async (req, resp, next) => {
   try {
     const validUser = await User.findOne({ email });
     if (!validUser) {
-      const error = errorHandler(404, "Wrong credentials");
+      const error = errorHandler(401, "Wrong credentials");
       return next(error);
     }
     const validPassword = bcrypt.compareSync(password, validUser.password);
     if (!validPassword) {
-      const error = errorHandler(404, "Wrong credentials");
+      const error = errorHandler(401, "Wrong credentials");
       return next(error);
     }
     const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET, {
