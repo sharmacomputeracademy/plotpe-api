@@ -8,29 +8,33 @@ const userRouter = require("./routes/userRoute");
 const cors = require("cors");
 
 dotenv.config();
-
 connectDB();
 
 const app = express();
 
+// ✅ CORS (IMPORTANT)
 app.use(
   cors({
-    origin: "https://scalive.in",
+    origin: "https://scalive.in", // frontend domain
     credentials: true,
-  }),
+  })
 );
 
+// ✅ Middleware
 app.use(express.json());
 app.use(cookieParser());
 
-app.use("/api/auth/", authRouter);
+// ✅ Routes
+app.use("/api/auth", authRouter);
 app.use("/api/listing", listingRouter);
 app.use("/api/user", userRouter);
 
-app.use((err, req, resp, next) => {
+// ✅ Error handler
+app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || "Interner Server Error!";
-  resp.status(statusCode).json({
+  const message = err.message || "Internal Server Error";
+
+  res.status(statusCode).json({
     success: false,
     statusCode,
     message,
